@@ -1,17 +1,22 @@
 using Microsoft.EntityFrameworkCore;
-using TestArquitecturaCQRS.Models;
+using TestArquitecturaCQRS.Data;
+using MediatR;
 
 var builder = WebApplication.CreateBuilder(args);
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-//// Add DbContext localdb
+//// ----------> Add DbContext localdb
 //builder.Services.AddDbContext<ApplicationDbContext>(options =>
 //options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Add DbContext inMemory
+//// ----------> Add DbContext inMemory
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 options.UseInMemoryDatabase("InMemoryDb"));
+
+// Add MediatR
+builder.Services.AddMediatR(typeof(Program).Assembly);
 
 var app = builder.Build();
 
