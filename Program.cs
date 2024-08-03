@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using MediatR;
+using TestArquitecturaCQRS.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -49,6 +50,9 @@ builder.Services.AddCors(options =>
                           .AllowAnyMethod());
 });
 
+// Register the middleware
+builder.Services.AddSingleton<GlobalExceptionHandler>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -64,12 +68,14 @@ app.UseStaticFiles();
 
 app.UseRouting();
 app.UseAuthentication();
-app.UseAuthorization(); // -----> (Cross-Origin Resource Sharing) 
+app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
+// Use (Cross-Origin Resource Sharing) 
 app.UseCors("AllowSpecificOrigin");
-
+// Use the middleware
+app.UseMiddleware<GlobalExceptionHandler>();
 app.Run();
