@@ -40,6 +40,15 @@ options.UseInMemoryDatabase("InMemoryDb"));
 // Add MediatR
 builder.Services.AddMediatR(typeof(Program).Assembly);
 
+// add CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigin",
+        builder => builder.WithOrigins("https://trustedorigin.com")
+                          .AllowAnyHeader()
+                          .AllowAnyMethod());
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -55,10 +64,12 @@ app.UseStaticFiles();
 
 app.UseRouting();
 app.UseAuthentication();
-app.UseAuthorization();
+app.UseAuthorization(); // -----> (Cross-Origin Resource Sharing) 
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+app.UseCors("AllowSpecificOrigin");
 
 app.Run();
