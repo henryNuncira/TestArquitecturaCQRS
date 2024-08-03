@@ -1,17 +1,57 @@
 using Microsoft.EntityFrameworkCore;
-using TestArquitecturaCQRS.Models;
+using TestArquitecturaCQRS.Data;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using MediatR;
+using TestArquitecturaCQRS.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-//// Add DbContext localdb
+// JWT Authentication
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+        ValidAudience = builder.Configuration["Jwt:Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+    };
+});
+//// ----------> Add DbContext localdb
 //builder.Services.AddDbContext<ApplicationDbContext>(options =>
 //options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Add DbContext inMemory
+//// ----------> Add DbContext inMemory
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 options.UseInMemoryDatabase("InMemoryDb"));
+
+// Add MediatR
+builder.Services.AddMediatR(typeof(Program).Assembly);
+
+// add CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigin",
+        builder => builder.WithOrigins("https://trustedorigin.com")
+                          .AllowAnyHeader()
+                          .AllowAnyMethod());
+});
+
+// Register the middleware
+builder.Services.AddSingleton<GlobalExceptionHandler>();
 
 var app = builder.Build();
 
@@ -27,11 +67,15 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
+// Use (Cross-Origin Resource Sharing) 
+app.UseCors("AllowSpecificOrigin");
+// Use the middleware
+app.UseMiddleware<GlobalExceptionHandler>();
 app.Run();

@@ -5,6 +5,8 @@ VisualStudioVersion = 17.1.32421.90
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestArquitecturaCQRS", "TestArquitecturaCQRS.csproj", "{6D3042D8-25A4-487C-B6EE-42AE602C08EF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestArquitecturaCQRS.Tests", "TestArquitecturaCQRS.Tests\TestArquitecturaCQRS.Tests.csproj", "{0E4D6BB8-4B70-4C9E-BA12-508EA81A6F3B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{6D3042D8-25A4-487C-B6EE-42AE602C08EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6D3042D8-25A4-487C-B6EE-42AE602C08EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6D3042D8-25A4-487C-B6EE-42AE602C08EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E4D6BB8-4B70-4C9E-BA12-508EA81A6F3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E4D6BB8-4B70-4C9E-BA12-508EA81A6F3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E4D6BB8-4B70-4C9E-BA12-508EA81A6F3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E4D6BB8-4B70-4C9E-BA12-508EA81A6F3B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,6 +1,8 @@
-﻿namespace TestArquitecturaCQRS.Models
+﻿namespace TestArquitecturaCQRS.Data
 {
     using Microsoft.EntityFrameworkCore;
+    using TestArquitecturaCQRS.Models;
+
     public class ApplicationDbContext : DbContext
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
